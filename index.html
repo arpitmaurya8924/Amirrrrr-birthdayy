@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amir ka Birthday 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#2a0a4a;--bg2:#ff4d8d;--card:#fff8e7;--ink:#2a0a4a;--pop:#ffd23f;--btn:#ff4d8d;--btn2:#16c79a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{font-family:"Baloo 2",system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));display:flex;align-items:center;justify-content:center;overflow:hidden}
+#card{background:var(--card);width:min(92vw,440px);padding:28px 22px;border-radius:28px;text-align:center;box-shadow:0 10px 0 rgba(0,0,0,.25);position:relative;z-index:2;min-height:340px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px}
+.em{font-size:64px;line-height:1;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(6deg)}}
+h1{font-size:26px;margin:0;line-height:1.2;font-weight:800}
+p{font-size:18px;margin:0;line-height:1.35}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;min-height:56px;position:relative;width:100%}
+button{font:800 18px "Baloo 2",sans-serif;border:0;border-radius:16px;padding:12px 22px;color:#fff;background:var(--btn);box-shadow:0 5px 0 rgba(0,0,0,.25);cursor:pointer}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+button.g{background:var(--btn2)}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+#run{position:relative}
+.bar{width:100%;height:18px;background:#eee;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--btn2),var(--pop));transition:width .5s}
+.candles{display:flex;gap:18px;justify-content:center;font-size:48px}
+.candles span{cursor:pointer;transition:opacity .3s,transform .3s;user-select:none}
+.candles span.off{opacity:.25;transform:scale(.8)}
+.big{font-family:Pacifico,cursive;font-size:38px;line-height:1.25;color:var(--btn);margin:0}
+.sign{font-family:Pacifico,cursive;font-size:22px;color:var(--ink)}
+.fin{animation:pop .8s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+#mute{position:fixed;right:12px;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:4;padding:6px 12px;font-size:22px;background:rgba(255,255,255,.85);box-shadow:none}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:3}
+@media (prefers-reduced-motion:reduce){.em,.fin{animation:none}}
+</style>
+</head>
+<body>
+<div id="card"></div>
+<button id="mute" onclick="tm()" aria-label="Sound on/off">🔊</button>
+<canvas id="c"></canvas>
+<script>
+var card=document.getElementById("card"),S=0;
+var AC,M,muted=false;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();M=AC.createGain();M.connect(AC.destination)}catch(e){}}if(AC&&AC.state=="suspended")AC.resume();return AC}
+function tone(f,t,d,ty,v){var a=ac();if(!a)return;var o=a.createOscillator(),g=a.createGain(),n=a.currentTime+t;o.type=ty||"sine";o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime(v||.2,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(M);o.start(n);o.stop(n+d+.05)}
+function pop(){tone(520,0,.1,"square",.1);tone(780,.08,.12,"square",.1)}
+function boing(){var a=ac();if(!a)return;var o=a.createOscillator(),g=a.createGain(),n=a.currentTime;o.frequency.setValueAtTime(200,n);o.frequency.exponentialRampToValueAtTime(800,n+.2);g.gain.setValueAtTime(.25,n);g.gain.exponentialRampToValueAtTime(.001,n+.3);o.connect(g);g.connect(M);o.start(n);o.stop(n+.35)}
+function whoosh(){var a=ac();if(!a)return;var b=a.createBuffer(1,a.sampleRate*.35,a.sampleRate),d=b.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);var s=a.createBufferSource(),g=a.createGain();s.buffer=b;g.gain.value=.25;s.connect(g);g.connect(M);s.start()}
+function fan(){[523,659,784,1047,1319].forEach(function(f,i){tone(f,i*.07,.25,"triangle",.18)})}
+function bday(){var q=[[262,.75],[262,.25],[294,1],[262,1],[349,1],[330,2],[262,.75],[262,.25],[294,1],[262,1],[392,1],[349,2],[262,.75],[262,.25],[523,1],[440,1],[349,1],[330,1],[294,1],[466,.75],[466,.25],[440,1],[349,1],[392,1],[349,2]],t=.5,b=.36;q.forEach(function(n){tone(n[0],t,n[1]*b*.95,"triangle",.22);t+=n[1]*b})}
+function tm(){ac();muted=!muted;M.gain.value=muted?0:1;document.getElementById("mute").textContent=muted?"🔇":"🔊"}
+var steps=[
+ function(){return '<div class="em">👀</div><h1>Oye Amir!</h1><p>Ek bahut hi zaroori message aaya hai tumhare liye... kholna hai?</p><div class="row"><button onclick="go()">Haan kholo 😎</button></div>'},
+ function(){return '<div class="em">🕵️</div><h1>Pehle batao...</h1><p>Tum Amir hi ho na? Ya koi aur birthday boy ban ke ghus aaya hai? 😂</p><div class="row"><button class="g" onclick="go()">Haan bhai main hi Amir</button><button id="run">Nahi 🙈</button></div>'},
+ function(){return '<div class="em">🎁</div><h1>Gift load ho raha hai...</h1><p id="msg">Arpit se paise maang rahe hain 💸</p><div class="bar"><i id="pb"></i></div>'},
+ function(){return '<div class="em">🤣</div><h1>Breaking News!</h1><p>Aaj Amir ki umar ek saal badh gayi, lekin akal wahi hai jo pichle saal thi! 😂</p><div class="row"><button onclick="go()">Oye! Aage bol 😤</button></div>'},
+ function(){return '<div class="em">🍕</div><h1>Ek sacchi baat</h1><p>Tum wo dost ho jiske saath pizza ke last slice pe bhi ladai hoti hai... aur phir bhi wohi sabse pehle yaad aata hai ❤️</p><div class="row"><button onclick="go()">Aww 🥹 aage</button></div>'},
+ function(){return '<div class="em">🤝</div><h1>Dil se bol raha hu</h1><p>Teri hasi, tera pagalpan aur tera saath... sab kuch life ko mast bana deta hai. Bas aise hi hamesha khush rehna Amir! ✨</p><div class="row"><button onclick="go()">Thanks yaar 🥰</button></div>'},
+ function(){return '<h1>Ab cake kaato! 🎂</h1><p>Candles pe tap karke phoonk maaro 💨</p><div class="candles" id="cd"><span>🕯️</span><span>🕯️</span><span>🕯️</span></div>'},
+ function(){return '<div class="fin"><div class="em">🎉</div><p class="big">Happiest Birthday<br>Amir! 🥳🎂</p><p>Party meri taraf se pakki (bill tera) 😜🎈</p><p class="sign">Your Frnd Arpitt 😁</p><div class="row"><button onclick="boom()">Aur confetti 🎊</button></div></div>'}
+];
+function show(){card.innerHTML=steps[S]();after()}
+function go(){pop();S++;show()}
+function after(){
+ if(S==1){var r=document.getElementById("run");function mv(e){e.preventDefault();boing();r.style.left=(Math.random()*160-80)+"px";r.style.top=(Math.random()*60-30)+"px"}r.addEventListener("mouseover",mv);r.addEventListener("touchstart",mv);r.addEventListener("click",mv)}
+ if(S==2){var m=["Arpit se paise maang rahe hain 💸","Cake pe cream laga rahe hain 🍰","Balloon mein hawa bhar rahe hain 🎈","Tere dost ko dhundh rahe hain... mil gaya! 😁"],i=0,pb=document.getElementById("pb"),t=setInterval(function(){i++;pb.style.width=(i*25)+"%";tone(400+i*150,0,.15,"triangle",.2);if(i<4)document.getElementById("msg").textContent=m[i];if(i>=4){clearInterval(t);setTimeout(go,700)}},900);setTimeout(function(){pb.style.width="25%"},50)}
+ if(S==7)bday();
+ if(S==6){var sp=document.querySelectorAll("#cd span");sp.forEach(function(s){s.onclick=function(){s.classList.add("off");whoosh();s.textContent="💨";if(document.querySelectorAll("#cd .off").length==3)setTimeout(function(){go();boom()},500)}})}
+}
+var cv=document.getElementById("c"),x=cv.getContext("2d"),P=[],on=false;
+function sz(){cv.width=innerWidth;cv.height=innerHeight}sz();addEventListener("resize",sz);
+function boom(){fan();for(var i=0;i<140;i++)P.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:Math.random()*-14-2,c:"hsl("+Math.random()*360+",90%,60%)",s:Math.random()*8+4,r:Math.random()*6});if(!on){on=true;tick()}}
+function tick(){x.clearRect(0,0,cv.width,cv.height);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.r+=.2;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});P=P.filter(function(p){return p.y<innerHeight+20});if(P.length)requestAnimationFrame(tick);else{on=false;x.clearRect(0,0,cv.width,cv.height)}}
+show();
+</script>
+</body>
+</html>
